@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plaid Link</title>
+  <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+</head>
+<body>
+  <button id="link-button">Link Bank Account</button>
+  <script>
+    const linkToken = "link-production-e65a1ba4-4763-4691-b5e9-4adc9d165183"; // Replace with the link token you generated
+
+    var handler = Plaid.create({
+      token: linkToken, // Your link_token goes here
+      onSuccess: function(public_token, metadata) {
+        // The public_token is generated here after the user links their account.
+        console.log("Public Token: ", public_token);
+
+        // Optional: You can send this public_token to your backend to exchange for an access_token
+      },
+      onExit: function(err, metadata) {
+        // The user exited the Link flow.
+        if (err != null) {
+          // The user encountered an error prior to exiting.
+          console.error("Error: ", err);
+        }
+      }
+    });
+
+    document.getElementById('link-button').onclick = function() {
+      handler.open();
+    };
+  </script>
+</body>
+</html>
